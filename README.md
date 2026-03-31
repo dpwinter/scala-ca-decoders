@@ -13,19 +13,34 @@ The goal of this repository is reproducibility of results, not performance optim
 
 ---
 
+# Quick Start
+
+```bash
+make
+make scala2d
+
+python scripts/scan.py --config configs/scala2d_cc_paper_scan.json
+
+python scripts/summarize_scan.py   --input-dir results/scans/scala2d_cc_paper   --output-csv results/scans/scala2d_cc_paper_summary.csv
+
+python scripts/plot_code_capacity_paper.py   --csv results/scans/scala2d_cc_paper_summary.csv   --output results/figures/scala2d_cc.png
+```
+
+---
+
 # Repository Structure
 
 cpp/
   include/
   src/
-    models/        # CA implementations
-    experiments/   # 1D experiments
-    bindings/      # pybind11 modules (2D)
-    main.cpp       # CLI entrypoint
+    models/
+    experiments/
+    bindings/
+    main.cpp
 
 python/
-  experiments/     # 2D experiment runners
-  tests/           # sanity tests
+  experiments/
+  tests/
 
 scripts/
   scan.py
@@ -33,7 +48,7 @@ scripts/
   plot_*.py
 
 configs/
-  *.json           # scan configurations
+  *.json
 
 results/
   scans/
@@ -47,7 +62,7 @@ results/
 - Python >= 3.10
 - pybind11
 - numpy, pandas, matplotlib
-- pymatching (for phenomenological decoding)
+- pymatching
 
 ---
 
@@ -108,11 +123,7 @@ Example:
 
 python scripts/scan.py --config configs/scala2d_pheno_equal_scan.json
 
----
-
-## Linked Parameters
-
-Example:
+Linked parameters example:
 
 "linked": [
   ["p_data", "p_meas", "p_signal"]
@@ -120,7 +131,7 @@ Example:
 
 ---
 
-## Reset-Time Handling
+# Reset-Time Handling
 
 For phenomenological SCALA runs:
 
@@ -129,7 +140,7 @@ For phenomenological SCALA runs:
 
 ---
 
-# Workflow: Reproducing Figures
+# Workflow
 
 1. Run scan
 
@@ -187,4 +198,5 @@ This repository is minimal and intended for:
 
 # License
 
-MIT License. See LICENSE file.
+This project is licensed under the MIT License.  
+See the LICENSE file for details.
