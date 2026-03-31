@@ -1,0 +1,68 @@
+# =========================
+# Build artifacts (C++)
+# =========================
+build/
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+
+# Temporary object files (macOS clang)
+*.dSYM/
+*.out
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# =========================
+# Jupyter / notebooks
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Results / generated data
+# =========================
+results/
+data/
+*.npy
+*.npz
+*.csv
+
+# (optional: if you want to keep summaries)
+# !results/**/*.csv
+
+# =========================
+# Plots / figures
+# =========================
+*.png
+*.pdf
+*.svg
+
+# =========================
+# macOS
+# =========================
+.DS_Store
+
+# =========================
+# IDEs / editors
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Misc
+# =========================
+*.log

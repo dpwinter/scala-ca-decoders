@@ -1,0 +1,17 @@
+{
+	"model": "scala1d",
+	"backend": "cpp",
+	"noise_model": "phenological",
+	"experiment": "lifetime",
+	"distance": 7,
+	"samples": 100,
+	"max_steps": 10000,
+	"reset_time": 16,
+	"seed": 12345,
+	"noise": {
+		"data": 0.02,
+		"measurement": 0.0,
+		"signal": 0.0
+	},
+	"output_dir": "results/runs"
+}

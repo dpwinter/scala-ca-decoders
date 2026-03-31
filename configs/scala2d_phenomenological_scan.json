@@ -1,0 +1,16 @@
+{
+  "backend": "python",
+  "module": "python.experiments.run_scala2d",
+  "model": "scala2d",
+  "noise_model": "phenomenological",
+  "output_dir": "results/scans/scala2d_pheno",
+  "grid": {
+    "distance": [9, 27],
+    "samples": [100],
+    "p_data": [0.002, 0.004, 0.006, 0.01],
+    "p_meas": [0.0],
+    "p_signal": [0.0],
+    "reset_time": [7],
+    "seed": [12345]
+  }
+}

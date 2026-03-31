@@ -1,0 +1,16 @@
+{
+  "backend": "python",
+  "module": "python.experiments.run_scala2d",
+  "model": "scala2d",
+  "noise_model": "phenomenological",
+  "output_dir": "results/scans/scala2d_pheno_fast",
+  "grid": {
+    "distance": [3, 9, 27, 81],
+    "samples": [100],
+    "p_data": [0.1, 0.08, 0.06, 0.04, 0.03, 0.02, 0.01],
+    "p_meas": [0.1, 0.08, 0.06, 0.04, 0.03, 0.02, 0.01],
+    "p_signal": [0.1, 0.08, 0.06, 0.04, 0.03, 0.02, 0.01],
+    "reset_time": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+    "seed": [12345]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "executable": "./build/ca_run",
+  "model": "scala1d",
+  "noise_model": "phenomenological",
+  "output_dir": "results/scans/scala1d_pheno_small",
+  "grid": {
+    "distance": [3, 9],
+    "samples": [200],
+    "max_steps": [0],
+    "reset_time": [2, 4, 8, 16, 32],
+    "p_data": [0.01, 0.02, 0.03],
+    "p_meas": [0.0],
+    "p_signal": [0.0],
+    "seed": [12345]
+  }
+}

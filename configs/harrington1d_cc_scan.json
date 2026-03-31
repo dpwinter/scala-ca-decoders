@@ -1,0 +1,16 @@
+{
+  "executable": "./build/ca_run",
+  "model": "harrington1d",
+  "noise_model": "code_capacity",
+  "output_dir": "results/scans/harrington1d_cc",
+  "grid": {
+    "distance": [9, 27],
+    "samples": [5000],
+    "max_steps": [1000],
+    "p_data": [0.05, 0.1, 0.15, 0.2],
+    "U": [16],
+    "fN": [0.4],
+    "fC": [0.9],
+    "seed": [12345]
+  }
+}

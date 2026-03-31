@@ -1,0 +1,19 @@
+{
+  "backend": "python",
+  "module": "python.experiments.run_scala2d",
+  "model": "scala2d",
+  "noise_model": "phenomenological",
+  "output_dir": "results/scans/scala2d_equal_paper",
+  "linked": [
+    ["p_data", "p_meas", "p_signal"]
+  ],
+  "grid": {
+    "distance": [3, 9, 27, 81],
+    "samples": [200],
+    "p_data": [0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008],
+    "p_meas": [0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008],
+    "p_signal": [0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008],
+    "reset_time": [1, 2, 3, 4, 5, 6, 7, 8],
+    "seed": [12345]
+  }
+}

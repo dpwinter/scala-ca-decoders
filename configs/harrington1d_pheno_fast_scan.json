@@ -1,0 +1,18 @@
+{
+  "backend": "cpp",
+  "executable": "./build/ca_run",
+  "model": "harrington1d",
+  "noise_model": "phenomenological",
+  "output_dir": "results/scans/harrington1d_pheno_fast",
+  "grid": {
+    "distance": [3, 9, 27, 81],
+    "samples": [200],
+    "max_steps": [0],
+    "p_data": [0.1, 0.08, 0.06, 0.04, 0.03, 0.02, 0.01],
+    "p_meas": [0.0],
+    "U": [16],
+    "fN": [0.4],
+    "fC": [0.9],
+    "seed": [12345]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "backend": "cpp",
+  "executable": "./build/ca_run",
+  "model": "harrington1d",
+  "noise_model": "code_capacity",
+  "output_dir": "results/scans/harrington1d_cc_paper",
+  "grid": {
+    "distance": [3, 9, 27, 81],
+    "samples": [10000],
+    "max_steps": [1000],
+    "p_data": [0.01, 0.02, 0.03, 0.04, 0.06, 0.08, 0.1, 0.15, 0.2, 0.3],
+    "U": [16],
+    "fN": [0.4],
+    "fC": [0.9],
+    "seed": [12345]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "backend": "python",
+  "module": "python.experiments.run_harrington2d",
+  "model": "harrington2d",
+  "noise_model": "code_capacity",
+  "output_dir": "results/scans/harrington2d_cc_paper",
+  "grid": {
+    "distance": [3, 9, 27, 81],
+    "samples": [5000],
+    "p_data": [0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1],
+    "seed": [12345]
+  }
+}

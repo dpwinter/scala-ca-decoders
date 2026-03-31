@@ -1,0 +1,13 @@
+{
+  "backend": "python",
+  "module": "python.experiments.run_harrington2d",
+  "model": "harrington2d",
+  "noise_model": "phenomenological",
+  "output_dir": "results/scans/harrington2d_pheno",
+  "grid": {
+    "distance": [9],
+    "samples": [100],
+    "p_data": [0.004, 0.006, 0.01],
+    "seed": [12345]
+  }
+}

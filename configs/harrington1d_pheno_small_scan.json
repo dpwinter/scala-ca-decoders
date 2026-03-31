@@ -1,0 +1,17 @@
+{
+  "executable": "./build/ca_run",
+  "model": "harrington1d",
+  "noise_model": "phenomenological",
+  "output_dir": "results/scans/harrington1d_pheno_small",
+  "grid": {
+    "distance": [3, 9],
+    "samples": [200],
+    "max_steps": [0],
+    "p_data": [0.01, 0.02, 0.03],
+    "p_meas": [0.0],
+    "U": [16],
+    "fN": [0.4],
+    "fC": [0.9],
+    "seed": [12345]
+  }
+}
