@@ -1,0 +1,290 @@
+# scripts/plot_pheno_tR.py
+
+from pathlib import Path
+import math
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+
+# =============================================================================
+# Configuration
+# =============================================================================
+
+INPUT = Path("data/pheno/pheno_tR_lifetime_Tmax120d.csv")
+
+P = 0.014
+D_VALUES = [21, 41, 61, 81, 101]
+
+OUTPUT_PDF = Path("figs/scala1d_pheno_reset_time.pdf")
+OUTPUT_PNG = Path("figs/scala1d_pheno_reset_time.png")
+
+
+# =============================================================================
+# Reconstruct truncated lifetimes
+# =============================================================================
+
+def summarize_lifetimes(df):
+    """
+    Reconstruct <T_F>_trunc from the aggregated simulation output.
+
+    Failed trajectories contribute their actual failure time.
+    Trajectories surviving to T_max contribute T_max.
+    """
+
+    rows = []
+
+    group_cols = [
+        "d",
+        "p",
+        "p_meas",
+        "reset_factor",
+        "reset_period",
+        "rounds",
+    ]
+
+    for key, sub in df.groupby(group_cols, sort=True):
+
+        (
+            d,
+            p,
+            p_meas,
+            reset_factor,
+            reset_period,
+            rounds,
+        ) = key
+
+        sub = sub.sort_values("block")
+
+        shots_values = sub["shots"].astype(int).unique()
+
+        if len(shots_values) != 1:
+            raise RuntimeError(
+                f"Inconsistent shot count for "
+                f"d={d}, p={p}, reset_factor={reset_factor}"
+            )
+
+        shots = int(shots_values[0])
+
+        total_failures = int(
+            sub["failures"].sum()
+        )
+
+        final_row = sub.loc[
+            sub["t_end"].idxmax()
+        ]
+
+        survivors = int(
+            final_row["survivors_end"]
+        )
+
+        if total_failures + survivors != shots:
+            raise RuntimeError(
+                f"Failure/censoring count does not close for "
+                f"d={d}, p={p}, reset_factor={reset_factor}: "
+                f"{total_failures} failures + "
+                f"{survivors} survivors != {shots} shots"
+            )
+
+        sum_failure_t = float(
+            sub["sum_failure_t"].sum()
+        )
+
+        sum_failure_t2 = float(
+            sub["sum_failure_t2"].sum()
+        )
+
+        # Maximum simulated lifetime.
+        t_max = float(rounds)
+
+        # Y = min(T_F, T_max)
+        sum_y = (
+            sum_failure_t
+            + survivors * t_max
+        )
+
+        sum_y2 = (
+            sum_failure_t2
+            + survivors * t_max**2
+        )
+
+        mean_tf = (
+            sum_y / shots
+        )
+
+        # Standard error of the truncated mean.
+        if shots > 1:
+
+            sample_var = (
+                sum_y2
+                - shots * mean_tf**2
+            ) / (shots - 1)
+
+            sample_var = max(
+                sample_var,
+                0.0,
+            )
+
+            se_tf = math.sqrt(
+                sample_var / shots
+            )
+
+        else:
+            se_tf = np.nan
+
+        # Quantity shown in the figure.
+        deficit = (
+            1.0
+            - mean_tf / t_max
+        )
+
+        deficit_se = (
+            se_tf / t_max
+        )
+
+        rows.append({
+            "d": int(d),
+            "p": float(p),
+            "p_meas": float(p_meas),
+            "reset_factor": float(reset_factor),
+            "mean_tf": mean_tf,
+            "deficit": deficit,
+            "deficit_se": deficit_se,
+        })
+
+    return pd.DataFrame(rows)
+
+
+# =============================================================================
+# Main
+# =============================================================================
+
+def main():
+
+    df = pd.read_csv(INPUT)
+
+    # Explicitly select phenomenological noise with p = q.
+    df = df[
+        np.isclose(df["p"], P)
+        & np.isclose(df["p_meas"], P)
+        & df["d"].isin(D_VALUES)
+    ].copy()
+
+    if df.empty:
+        raise RuntimeError(
+            f"No data found for p = q = {P} "
+            f"and d = {D_VALUES}"
+        )
+
+    data = summarize_lifetimes(df)
+
+    # -------------------------------------------------------------------------
+    # Plot
+    # -------------------------------------------------------------------------
+
+    fig, ax = plt.subplots(
+        figsize=(5, 4)
+    )
+
+    for d in D_VALUES:
+
+        sub = (
+            data[data["d"] == d]
+            .sort_values("reset_factor")
+        )
+
+        if sub.empty:
+            continue
+
+        ax.errorbar(
+            sub["reset_factor"],
+            sub["deficit"],
+            yerr=sub["deficit_se"],
+            marker="o",
+            linestyle="-",
+            capsize=2,
+            label=rf"${d}$",
+        )
+
+    # Fixed reset schedule used in the simulations.
+    ax.axvline(
+        0.35,
+        linestyle="--",
+        color="gray",
+        linewidth=1.2,
+    )
+
+    ax.text(
+        0.35,
+        0.97,
+        r"$t_R=0.35d$",
+        transform=ax.get_xaxis_transform(),
+        ha="center",
+        va="top",
+    )
+
+    # -------------------------------------------------------------------------
+    # Axes
+    # -------------------------------------------------------------------------
+
+    ax.set_xlabel(
+        r"normalized reset period $t_R/d$"
+    )
+
+    ax.set_ylabel(
+        r"$1-\langle T_F\rangle_{\rm trunc}/T_{\max}$"
+    )
+
+    ax.set_yscale("log")
+
+    ax.set_xlim(
+        0.10,
+        0.50,
+    )
+
+    # Paper-style grid: major grid lines only.
+    ax.grid(
+        True,
+        which="major",
+        alpha=0.35,
+    )
+
+    ax.grid(
+        False,
+        which="minor",
+    )
+
+    # Put p=q in the legend instead of the data region.
+    ax.legend(
+        title=r"$d$",
+        loc="upper right",
+    )
+
+    # -------------------------------------------------------------------------
+    # Save
+    # -------------------------------------------------------------------------
+
+    OUTPUT_PDF.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    fig.tight_layout()
+
+    fig.savefig(
+        OUTPUT_PDF,
+        bbox_inches="tight",
+    )
+
+    fig.savefig(
+        OUTPUT_PNG,
+        dpi=300,
+        bbox_inches="tight",
+    )
+
+    plt.show()
+
+
+if __name__ == "__main__":
+    main()
